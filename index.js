@@ -2,7 +2,7 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 const cors = require('cors');
-
+require('dotenv').config();
 // Initialize Port Number
 const port = process.env.PORT || 5000;
 
@@ -13,8 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const uri =
-	'mongodb+srv://sulaiman1:loveYouShifa5683@cluster0.p4naa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@cluster0.p4naa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -29,11 +28,6 @@ const run = async () => {
 			const result = await products.insertOne(product);
 			res.send(result.acknowledged);
 		});
-		// app.post('/users', async (req, res) => {
-		// 	const user = req.body;
-		// 	const result = await users.insertOne(user);
-		// 	res.send(result.acknowledged);
-		// });
 		app.get('/products', async (req, res) => {
 			const cursor = products.find({});
 			const result = await cursor.toArray();
